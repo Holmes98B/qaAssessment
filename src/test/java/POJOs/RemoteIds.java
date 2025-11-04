@@ -1,5 +1,8 @@
 package POJOs;
 
+import lombok.Data;
+
+@Data
 public class RemoteIds {
     public String wikidata;
     public String isni;
