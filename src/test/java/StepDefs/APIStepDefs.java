@@ -1,9 +1,6 @@
 package StepDefs;
 
 import POJOs.AuthorsPojo;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.cucumber.java.PendingException;
-import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
 import io.restassured.RestAssured;
 import io.cucumber.java.en.Given;
@@ -11,8 +8,6 @@ import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.junit.Assert;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import static io.restassured.RestAssured.given;
@@ -20,12 +15,13 @@ import static io.restassured.RestAssured.given;
 public class APIStepDefs {
 
     Response authorsResponse;
-    protected ArrayList<AuthorsPojo> authResponseList;
 
     @Given("The user requests a get operation for {string} and {string}")
     public void theUserRequestsAGetOperationForAnd(String uri, String path) {
         RestAssured.baseURI = uri;
         RestAssured.useRelaxedHTTPSValidation();
+
+        //Assign the request with needed header values of the API
         RequestSpecification request =
                 given()
                         .log()
@@ -36,7 +32,10 @@ public class APIStepDefs {
                         .header("Accept-Encoding", "gzip, defalte, br")
                         .header("Connection", "keep-alive");
 
+        //Assign the response by making the call
         authorsResponse = request.get(path);
+
+        //Print out the returned data
         System.out.println(authorsResponse.asString());
 
     }
@@ -59,13 +58,14 @@ public class APIStepDefs {
                 System.out.println("Comparing the alternate name from feature: " + auth.get("Value") + " to the names from API: \n" + author.getAlternate_names());
 
                 //Boolean to be used to confirm a match has been found
-                Boolean isMatched = false;
+                boolean isMatched = false;
                 int count = 0;
                 //Loop through the personal_name arrayList to get the matching option to feature file
                 do {
                     isMatched = false;
                     if (author.getAlternate_names().get(count).equalsIgnoreCase(auth.get("Value"))) {
                         System.out.println("Matched values: " + auth.get("Value"));
+                        isMatched = true;
                     }
                     count++;
                 } while (count < author.getPersonal_name().length() && !isMatched);
