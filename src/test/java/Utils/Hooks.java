@@ -19,7 +19,7 @@ public class Hooks {
         //Set option to load browser at max window size
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--start-maximized");
-        //options.addArguments("--headless");
+        options.addArguments("--headless");
 
         driver = new ChromeDriver(options);
         WebDriverRunner.setWebDriver(driver);
